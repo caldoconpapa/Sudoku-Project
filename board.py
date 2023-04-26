@@ -52,7 +52,7 @@ class Board:
             )
         for i in range(4):
             # draw the vert lines in bold that will create the border of the boxes
-            py.game.draw.line(
+            pygame.game.draw.line(
                 self.screen,
                 LINE_COLOR,
                 (i * BOX_D, 0),
@@ -60,7 +60,7 @@ class Board:
                 LINE_WIDTH_BOLD
             )
             # draw the horz line in bold that will create the border of the boxes
-            py.game.draw.line(
+            pygame.game.draw.line(
                 self.screen,
                 LINE_COLOR,
                 (0, i *BOX_D),
