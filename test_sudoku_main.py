@@ -204,7 +204,7 @@ def main():
                     main()
                 # this is to tell the computer that I will be selecting a cell
                 # in as long as they are in row, col (0,8)
-                if 0 <= row <= 8 and 0 <= column <= 8:
+                if 0 <= row <= 8 and 0 <= col <= 8:
                   if game_board.OG[int(row)][int(col)] == 0:
                     current_game_cell = game_board.select(row, col)
                     # the self.select() from the board.py will allow the user to edit

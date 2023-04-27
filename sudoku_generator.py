@@ -1,12 +1,19 @@
-import math, random
+import math, random, copy
 
 class SudokuGenerator:
     def __init__(self, row_length, removed_cells):
         # initalize the sudoku board
         self.row_length = row_length
-        self.removed_cells = removed_cells
-        self.board = [[0] * row_length for i in range(row_length)]
         self.box_length = int(math.sqrt(row_length))
+
+        self.removed_cells = removed_cells
+
+        self.board = []
+        for i in range(0, self.row_length):
+            self.board.append([])
+            for j in range(0, self.row_length):
+                self.board[i].append(0)
+
 
     def get_board(self):
         # return the sudoku board
@@ -15,17 +22,17 @@ class SudokuGenerator:
 
     def print_board(self):
         # print the sudoku board
-        print(self.board)
+        for i in range(0, self.row_length):
+            print(self.board[i])
 
 
     def valid_in_row(self, row, num):
         # checks the row for the number given as input
         # returns True if the input in not in the row, else False
-        for i in self.board[row]:
-            if i == num:
+        for i in range(0, self.row_length):
+            if self.board[row][i] == num:
                 return False
         return True
-
 
 
 
@@ -109,19 +116,27 @@ class SudokuGenerator:
     def remove_cells(self):
         # remove cells from the board, cells to remove defined in constructor
         # keep removing cells until the num_cells_remove is == 0
-        num_cells_remove = self.removed_cells
-        while num_cells_remove > 0:
-            row = random.randint(0, self.row_length-1)
-            col = random.randint(0, self.row_length-1)
-            if self.board[row][col] != 0:
-                self.board[row][col] = 0
-                num_cells_remove -= 1
+        random_row = random.randint(0, 8)
+        random_col = random.randint(0, 8)
+        count = 0
+        while count < self.removed_cells:
+            if self.board[random_row][random_col] != 0:
+                self.board[random_row][random_col] = 0
+                random_row = random.randint(0, 8)
+                random_col = random.randint(0, 8)
+                count += 1
+            else:
+                random_row = random.randint(0, 8)
+                random_col = random.randint(0, 8)
 
-def generate_sudoku(size, removed):
+def generate_sudoku(size, removed=0):
     # given to us and will generate the sudoku board
+    # i changed this so that I can give the Board class 3 return arguments
     sudoku = SudokuGenerator(size, removed)
     sudoku.fill_values()
     board = sudoku.get_board()
+    filled = copy.deepcopy(board)
     sudoku.remove_cells()
-    board = sudoku.get_board()
-    return board
+    original = copy.deepcopy(board)
+    sudoku.print_board()
+    return board, filled, original
