@@ -1,20 +1,20 @@
 import pygame
 from constants import *
 from board import Board
-
+from cell import Cell
 
 def game_start(screen):
     # initialize the font of title, button, game_diff
-    initial_title_font = pygame.font.Font(None,120)
-    button_font = pygame.font.Font(None, BUTTON_TEXT_SIZE)
-    game_diff_font = pygame.font.Font(None, 100)
+    initial_title_font = pygame.font.SysFont(WELCOME_FONT,WELCOME_SIZE)
+    button_font = pygame.font.SysFont(BUTTON_FONT, BUTTON_TEXT_SIZE)
+    game_diff_font = pygame.font.SysFont(GAME_DIFF_FONT, DIFF_SIZE)
 
 
     # fill in the background color of the pygame
     screen.fill(BG_COLOR)
 
     # define the title surface to appear on the pygame board
-    title_surf = initial_title_font.render("Welcome to Paradise Lost", True, LINE_COLOR)
+    title_surf = initial_title_font.render("Welcome to Sudoku", True, LINE_COLOR)
 
     # define the rectangle to specify the location of my surface
     title_rect = title_surf.get_rect(
@@ -24,8 +24,8 @@ def game_start(screen):
     # 1st arg is surface, 2nd arg is the rectangle above the location of the surface
     screen.blit(title_surf, title_rect)
 
-    game_diff_surf = game_diff_font.render("Pick Difficulty of Puzzle:", True, LINE_COLOR)
-    game_diff_rect = game_surf.get_rect(
+    game_diff_surf = game_diff_font.render("Select Game Mode:", True, LINE_COLOR)
+    game_diff_rect = game_diff_surf.get_rect(
         center=((WIDTH // 2),(HEIGHT // 2)))
     screen.blit(game_diff_surf, game_diff_rect)
 
@@ -39,31 +39,31 @@ def game_start(screen):
     # define the button object as a surface, then use fill (fill surf w/ COLOR)
     # blit the surface onto the game window
 
-    easy_button_surf = pygame.Surface(((easy_text_surf.get_size()[0]+30),(easy_text_surf.get_size()[1]+30)))
-    easy_button_surf.fill(LINE_COLOR)
+    easy_button_surf = pygame.Surface(((easy_text_surf.get_size()[0]+20),(easy_text_surf.get_size()[1]+20)))
+    easy_button_surf.fill(BUTTON_COLOR)
 
     # pygame.Surface.blit - letting us draw one image onto another
     # 1st arg == source surface (text) to be drawn on this surface (button)
     # 2nd arg == dest (pair of coordinates) to represent the position of upper left corner of the blit/rect
-    easy_button_surf.blit(easy_text_surf, (12,12))
+    easy_button_surf.blit(easy_text_surf, (10,10))
 
-    med_button_surf = pygame.Surface(((med_text_surf.get_size()[0] + 30), (med_text_surf.get_size()[1] + 30)))
-    med_button_surf.fill(LINE_COLOR)
-    med_button_surf.blit(med_text_surf, (12, 12))
+    med_button_surf = pygame.Surface(((med_text_surf.get_size()[0] + 20), (med_text_surf.get_size()[1] + 20)))
+    med_button_surf.fill(BUTTON_COLOR)
+    med_button_surf.blit(med_text_surf, (10, 10))
 
-    hard_button_surf = pygame.Surface(((hard_text_surf.get_size()[0] + 30), (hard_text_surf.get_size()[1] + 30)))
-    hard_button_surf.fill(LINE_COLOR)
-    hard_button_surf.blit(hard_text_surf, (12, 12))
+    hard_button_surf = pygame.Surface(((hard_text_surf.get_size()[0] + 20), (hard_text_surf.get_size()[1] + 20)))
+    hard_button_surf.fill(BUTTON_COLOR)
+    hard_button_surf.blit(hard_text_surf, (10, 10))
 
     # define the button rectangle object
     easy_button_rect = easy_button_surf.get_rect(
-        center=((WIDTH // 2 - 180 ), (HEIGHT // 2 + 180))
+        center=((WIDTH // 2 - 180 ), (HEIGHT // 2 + 120))
     )
     med_button_rect = med_button_surf.get_rect(
-        center=((WIDTH // 2), (HEIGHT // 2 + 180))
+        center=((WIDTH // 2), (HEIGHT // 2 + 120))
     )
     hard_button_rect = hard_button_surf.get_rect(
-        center=((WIDTH // 2 + 180), (HEIGHT // 2 + 180))
+        center=((WIDTH // 2 + 180), (HEIGHT // 2 + 120))
     )
 
     # screen.blit to bring buttons to the screen
@@ -192,7 +192,7 @@ def main():
             # This if statement accounts for when the game is actively being played
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
                 x, y = event.pos
-                column, row = game_board.click(x, y)
+                col, row = game_board.click(x, y)
             # I want to create a series of if statements that account for
             # the quitting and restarting
                 if reset_rect.collidepoint(x, y):
@@ -202,9 +202,80 @@ def main():
                     pygame.quit()
                 if restart_rect.collidepoint(x, y):
                     main()
+                # this is to tell the computer that I will be selecting a cell
+                # in as long as they are in row, col (0,8)
+                if 0 <= row <= 8 and 0 <= column <= 8:
+                  if game_board.OG[int(row)][int(col)] == 0:
+                    current_game_cell = game_board.select(row, col)
+                    # the self.select() from the board.py will allow the user to edit
+                    # the value within the cell
+                    # lets change select to True, the board class
+                    select = True
+                    game_board.draw()
+            pygame.display.update()
+        while select:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_0:
+                        current_game_cell.set_cell_value(0)
+                    if event.key == pygame.K_1:
+                        current_game_cell.set_cell_value(1)
+                    if event.key == pygame.K_2:
+                        current_game_cell.set_cell_value(2)
+                    if event.key == pygame.K_3:
+                        current_game_cell.set_cell_value(3)
+                    if event.key == pygame.K_4:
+                        current_game_cell.set_cell_value(4)
+                    if event.key == pygame.K_5:
+                        current_game_cell.set_cell_value(5)
+                    if event.key == pygame.K_6:
+                        current_game_cell.set_cell_value(6)
+                    if event.key == pygame.K_7:
+                        current_game_cell.set_cell_value(7)
+                    if event.key == pygame.K_8:
+                        current_game_cell.set_cell_value(8)
+                    if event.key == pygame.K_9:
+                        current_game_cell.set_cell_value(9)
+                    if event.key == pygame.K_BACKSPACE:
+                        current_game_cell.set_cell_value(0)
+                        current_game_cell.selected = True
+                        game_board.draw()
+                        pygame.display.update()
+                    game_board.update_board()
+                    current_game_cell.draw(screen)
+                    game_board.check_board()
+                    current_game_cell.selected = True
+                    game_board.draw()
+                    if game_board.is_full():
+                        if game_board.check_board():
+                            game_won(screen)
+                        else:
+                            game_loss(screen)
+                        game_over = True
+                        select = False
 
-    # needs more work, I am not understanding the implimentation of the other executables
-    # will be looking at Professor Zhou's tic tac toe example again
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x,y = event.pos
+                    if reset_rect.collidepoint(x,y):
+                        game_board.reset_to_original()
+                    if exit_rect.collidepoint(x,y):
+                        pygame.quit()
+                    if restart_rect.collidepoint(x,y):
+                        main()
+
+
+                    col,row= game_board.click(x,y)
+                    if 0 <= row <= 8 and 0 <= col <= 8:
+                        if game_board.original[int(row)][int(col)] == 0:
+                            current_game_cell = current_board.select(row, col)
+                            select = True
+                            game_board.draw()
+                pygame.display.update()
+            pygame.display.update()
+
+
 
 
 
