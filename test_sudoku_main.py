@@ -40,7 +40,7 @@ def game_start(screen):
     # blit the surface onto the game window
 
     easy_button_surf = pygame.Surface(((easy_text_surf.get_size()[0]+20),(easy_text_surf.get_size()[1]+20)))
-    easy_button_surf.fill(BUTTON_COLOR)
+    easy_button_surf.fill(BG_BUTTON_COLOR)
 
     # pygame.Surface.blit - letting us draw one image onto another
     # 1st arg == source surface (text) to be drawn on this surface (button)
@@ -48,11 +48,11 @@ def game_start(screen):
     easy_button_surf.blit(easy_text_surf, (10,10))
 
     med_button_surf = pygame.Surface(((med_text_surf.get_size()[0] + 20), (med_text_surf.get_size()[1] + 20)))
-    med_button_surf.fill(BUTTON_COLOR)
+    med_button_surf.fill(BG_BUTTON_COLOR)
     med_button_surf.blit(med_text_surf, (10, 10))
 
     hard_button_surf = pygame.Surface(((hard_text_surf.get_size()[0] + 20), (hard_text_surf.get_size()[1] + 20)))
-    hard_button_surf.fill(BUTTON_COLOR)
+    hard_button_surf.fill(BG_BUTTON_COLOR)
     hard_button_surf.blit(hard_text_surf, (10, 10))
 
     # define the button rectangle object
@@ -163,11 +163,6 @@ def game_won(screen):
         pygame.display.update()
 
 
-
-
-
-
-
 def main():
     # start the main function
     # start the screen and the variables to carry into the game and the player options selected
@@ -216,8 +211,9 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
+                    # set the cell value given that the user has inputted a value (used the number keys on keyboard)
                     if event.key == pygame.K_0:
-                        current_game_cell.set_cell_value(0)
+                        current_game_cell.set_cell_value(None)
                     if event.key == pygame.K_1:
                         current_game_cell.set_cell_value(1)
                     if event.key == pygame.K_2:
@@ -255,6 +251,7 @@ def main():
                         select = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    # here we the restart, reset, buttons are initiated
                     x,y = event.pos
                     if reset_rect.collidepoint(x,y):
                         game_board.reset_to_original()
@@ -262,7 +259,6 @@ def main():
                         pygame.quit()
                     if restart_rect.collidepoint(x,y):
                         main()
-
 
                     col,row= game_board.click(x,y)
                     if 0 <= row <= 8 and 0 <= col <= 8:

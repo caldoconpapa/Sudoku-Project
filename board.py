@@ -17,10 +17,6 @@ class Board:
         self.screen = screen
         self.difficulty = difficulty
         self.board, self.filled, self.OG = generate_sudoku(BOARD_SIZE, difficulty)
-        #self.filled = generate_sudoku(BOARD_SIZE, difficulty)
-        #self.OG = generate_sudoku(BOARD_SIZE, difficulty)
-        #self.OG = generate_sudoku(BOARD_SIZE, difficulty)
-        #self.filled = generate_sudoku(BOARD_SIZE, difficulty)
 
         # bind cells to be a cell object that is 9 rows x 9 col on screen
         self.cells = [
@@ -31,7 +27,9 @@ class Board:
 
     def draw(self):
         self.screen.fill(BG_COLOR)
+        # we will be giving coloring in the board background
         for i in range(1, BOARD_ROWS + 1):
+            # we will be drawing our horizontal lines that make up the cells on the board
             if i % 3 != 0:
                 pygame.draw.line(
                     self.screen,
@@ -40,6 +38,7 @@ class Board:
                     (WIDTH, i * SQUARE_SIZE),
                     LINE_WIDTH_CELL
                 )
+                # make the horizontal lines that will make up the boxes that will contain the cells on the board
             else:
                 pygame.draw.line(
                     self.screen,
@@ -49,7 +48,7 @@ class Board:
                     LINE_WIDTH_BOLD
                 )
 
-        # draw vertical lines
+        # draw vertical lines (same process just done with for vertical lines onfthe board )
         for j in range(1, BOARD_COLS):
             if j % 3 != 0:
                 pygame.draw.line(
@@ -67,7 +66,7 @@ class Board:
                     (j * SQUARE_SIZE, HEIGHT - (HEIGHT - WIDTH)),
                     LINE_WIDTH_BOLD
                 )
-        # This for loop goes through each cell in the list of cell objects and draws each individual cells
+        # go to the list of cells and then draw the value in the cells on screen
         for i in self.cells:
             for j in i:
                 j.draw(self.screen)
@@ -75,22 +74,22 @@ class Board:
 
         button_font = pygame.font.Font(None, 40)
 
-        reset_text = button_font.render("Reset", True, BUTTON_COLOR)
-        restart_text = button_font.render("Restart", True, BUTTON_COLOR)
-        exit_text = button_font.render("Exit", True, BUTTON_COLOR)
+        reset_text = button_font.render("Reset", True, BUTTON_TEXT_COLOR)
+        restart_text = button_font.render("Restart", True, BUTTON_TEXT_COLOR)
+        exit_text = button_font.render("Exit", True, BUTTON_TEXT_COLOR)
 
-        # Initialize button background color and text
+        # button background color and text
         reset_surf = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
-        reset_surf.fill(LINE_COLOR)
+        reset_surf.fill(BG_BUTTON_COLOR)
         reset_surf.blit(reset_text, (10, 10))
         restart_surf = pygame.Surface((restart_text.get_size()[0] + 20, restart_text.get_size()[1] + 20))
-        restart_surf.fill(LINE_COLOR)
+        restart_surf.fill(BG_BUTTON_COLOR)
         restart_surf.blit(restart_text, (10, 10))
         exit_surf = pygame.Surface((exit_text.get_size()[0] + 20, exit_text.get_size()[1] + 20))
-        exit_surf.fill(LINE_COLOR)
+        exit_surf.fill(BG_BUTTON_COLOR)
         exit_surf.blit(exit_text, (10, 10))
 
-        # Initialize button rectangle
+        # button rectangle ('easy','medium','hard')
         reset_rect = reset_surf.get_rect(
             center=(WIDTH // 2 - 200, HEIGHT // 2 + 450))
         restart_rect = restart_surf.get_rect(
@@ -98,7 +97,7 @@ class Board:
         exit_rect = exit_surf.get_rect(
             center=(WIDTH // 2 + 200, HEIGHT // 2 + 450))
 
-        # Draw buttons
+        # Draw buttons onto the screen
         self.screen.blit(reset_surf, reset_rect)
         self.screen.blit(restart_surf, restart_rect)
         self.screen.blit(exit_surf, exit_rect)
@@ -121,31 +120,6 @@ class Board:
         row = x // SQUARE_SIZE
         col = y // SQUARE_SIZE
         return row, col
-
-    #def clear(self):
-    #    # clear the value of the cell, the user can remove values and sketched value that are filled by themselves
-    #    current_row, current_col = self.pos
-    #    if self.OG[current_row][current_col] != self.board[current_row][current_col].value:
-    #        self.board[current_row][current_col].set_cell_value(0)
-    #    self.board[current_row][current_col].set_sketched_value(0)
-
-
-    #def sketch(self, value):
-    #    # set the sketched value of the current cell == user entered value
-    #    # the sketched value will be displayed in the top left corner of the cell using the draw() fun
-    #    current_row, current_col = self.pos
-    #    if not self.board[current_row][current_col].is_OG:
-    #        self.board[current_row][current_col].set_sketched_value(value)
-
-
-    #def place_number(self, value):
-    #    # set the value of the current selected cell == to the user input
-    #    # called when the user used the 'ENTER' key
-    #    current_row, current_col = self.pos
-    #    if not self.board[current_row][current_col].is_OG:
-    #        if self.board[current_row][current_col].sketched_value != 0:
-    #            self.board[current_row][current_col].set_cell_value(self.board[current_row][current_col].sketched_value)
-    #            self.board[current_row][current_col].set_sketched_value(0)
 
 
     def reset_to_original(self):
@@ -171,14 +145,7 @@ class Board:
             for j in i:
                 self.board[j.row][j.col] = j.value
 
-    #def find_empty(self):
-    #    # find an empty cell and return the row and col as a tuple (row,col)
-        # is this needed? i don't know
-    #    for col in range[BOARD_SIZE]:
-    #        for row in range[BOARD_SIZE]:
-    #            if self.board[row][col] == 0:
-    #                return (row, col)
-    #    return None
+
 
     def check_board(self):
         # check to see that the sudoku board is solved completely
@@ -187,10 +154,4 @@ class Board:
                 if self.board[i][j] != self.filled[i][j]:
                     return False
         return True
-        #for i in range(len(self.OG)):
-        #    for j in range(len(self.OG[0])):
-        #        if self.board[i][j].value != self.solution[i][j]:
-        #            return False
-        #return True
-
 

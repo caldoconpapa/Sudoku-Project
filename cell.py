@@ -20,14 +20,9 @@ class Cell:
         # setter for the cell value
         self.value = value
 
-###########################################################################################################################
-    #def set_sketched_value(self, value):
-        # setter for the cells sketched value
-    #    self.sketched_value = value
-
-
 
     def draw(self, screen):
+        # give the sudoku numbers their own font and size
         num_font = pygame.font.SysFont(NUM_FONT, NUM_SIZE)
         # Sets up the fonts and colors for each possible number on the board
         num0_surf = num_font.render('0', True, NUM_COLOR)
@@ -42,11 +37,11 @@ class Cell:
         num9_surf = num_font.render('9', True, NUM_COLOR)
         # This part make the outline of the cell turn red when the selected cell when the cell is the clicked
         if self.select:
-            pygame.draw.rect(screen, LINE_COLOR, pygame.Rect(self.col * SQUARE_SIZE, self.row * SQUARE_SIZE,
+            pygame.draw.rect(screen, CELL_SELECTED_COLOR, pygame.Rect(self.col * SQUARE_SIZE, self.row * SQUARE_SIZE,
                                                                 SQUARE_SIZE, SQUARE_SIZE), 2)
             self.select = False
 
-        # This sequence of if-statements helps ensure that each value is drawn correctly and in the correct position
+        # if-statements that will let us have the right value at the right location
         if self.value == 0:
             num_rect = num0_surf.get_rect(
                 center=(SQUARE_SIZE * self.col + SQUARE_SIZE // 2, SQUARE_SIZE * self.row + SQUARE_SIZE // 2))
