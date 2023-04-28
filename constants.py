@@ -19,11 +19,11 @@ GRAY33 = (84,84,84)
 # dimensions of the board and cells
 
 WIDTH = 900
-HEIGHT = 900
+HEIGHT = 1000
 CELL_D = 100
 BOX_D = 300
 BOTTOM_B  = HEIGHT - CELL_D # bottom box
-SQUARE_SIZE = WIDTH/9
+SQUARE_SIZE = (WIDTH/9)
 # need to look through my class files,
 # i dont remember using SQUARE_SIZE, perhaps I used it while following Professor Zhou tic tac toe example
 

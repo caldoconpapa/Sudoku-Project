@@ -75,9 +75,9 @@ class Board:
 
         button_font = pygame.font.Font(None, 40)
 
-        reset_text = button_font.render("Reset", True, (255, 255, 255))
-        restart_text = button_font.render("Restart", True, (255, 255, 255))
-        exit_text = button_font.render("Exit", True, (255, 255, 255))
+        reset_text = button_font.render("Reset", True, BUTTON_COLOR)
+        restart_text = button_font.render("Restart", True, BUTTON_COLOR)
+        exit_text = button_font.render("Exit", True, BUTTON_COLOR)
 
         # Initialize button background color and text
         reset_surf = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
@@ -92,11 +92,11 @@ class Board:
 
         # Initialize button rectangle
         reset_rect = reset_surf.get_rect(
-            center=(WIDTH // 2 - 200, HEIGHT // 2 + 300))
+            center=(WIDTH // 2 - 200, HEIGHT // 2 + 450))
         restart_rect = restart_surf.get_rect(
-            center=(WIDTH // 2, HEIGHT // 2 + 300))
+            center=(WIDTH // 2, HEIGHT // 2 + 450))
         exit_rect = exit_surf.get_rect(
-            center=(WIDTH // 2 + 200, HEIGHT // 2 + 300))
+            center=(WIDTH // 2 + 200, HEIGHT // 2 + 450))
 
         # Draw buttons
         self.screen.blit(reset_surf, reset_rect)
@@ -161,7 +161,7 @@ class Board:
         # return Boolean corresponding to whether the board is full or not
         for i in self.board:
             for j in i:
-                if num == 0:
+                if j == 0:
                     return False
         return True
 

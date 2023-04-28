@@ -142,7 +142,7 @@ def game_won(screen):
     exit_text_surf = button_font.render('Exit Game!', True, BG_COLOR)
 
     exit_button_surf = pygame.Surface(
-        ((exit__surf.get_size()[0] + 30), (restart_text_surf.get_size()[1] + 30)))
+        ((exit_text_surf.get_size()[0] + 30), (exit_text_surf.get_size()[1] + 30)))
     exit_button_surf.fill(LINE_COLOR)
     exit_button_surf.blit(exit_text_surf, (12, 12))
 
@@ -179,9 +179,7 @@ def main():
 
     game_board = Board(WIDTH,HEIGHT,screen,difficulty)
     game_board.draw()
-    reset_rect = game_board.draw()
-    restart_rect = game_board.draw()
-    exit_rect = game_board.draw()
+    reset_rect, restart_rect, exit_rect = game_board.draw()
     select = False
 
     while True:
@@ -268,8 +266,8 @@ def main():
 
                     col,row= game_board.click(x,y)
                     if 0 <= row <= 8 and 0 <= col <= 8:
-                        if game_board.original[int(row)][int(col)] == 0:
-                            current_game_cell = current_board.select(row, col)
+                        if game_board.OG[int(row)][int(col)] == 0:
+                            current_game_cell = game_board.select(row, col)
                             select = True
                             game_board.draw()
                 pygame.display.update()
